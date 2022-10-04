@@ -154,12 +154,12 @@ export default function LoginPage() {
               />
               <label
                 htmlFor="remember"
-                className="ml-2 block text-sm text-gray-900"
+                className="ml-2 block text-sm text-gray-400"
               >
                 Remember me
               </label>
             </div>
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-sm text-gray-400">
               Don't have an account?{" "}
               <Link
                 className="text-blue-500 underline"
