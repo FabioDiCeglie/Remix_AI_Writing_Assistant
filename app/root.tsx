@@ -35,7 +35,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body className="min-h-screen bg-slate-900">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
