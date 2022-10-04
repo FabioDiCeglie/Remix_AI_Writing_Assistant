@@ -7,6 +7,7 @@ export default function Index() {
   return (
     <div>
       <h1 className="text-slate-100">This is the index page</h1>
+      <p className="text-slate-300">Welcome {user?.email}</p>
     </div>
   );
 }
