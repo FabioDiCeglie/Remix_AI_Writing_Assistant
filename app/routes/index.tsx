@@ -12,8 +12,8 @@ export default function Index() {
         {user ? (
           <div className="mx-auto mt-4 flex w-full items-center justify-between px-20 text-slate-200">
             <p>Welcome {user.email}</p>
-            <Form action="/logout" method="post">
-              <div className="flex gap-5">
+            <div className="flex gap-5">
+              <Form action="/logout" method="post">
                 <Link
                   className="rounded bg-slate-600 py-2 px-4 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
                   to="/writing"
@@ -26,8 +26,8 @@ export default function Index() {
                 >
                   Log out
                 </button>
-              </div>
-            </Form>
+              </Form>
+            </div>
           </div>
         ) : (
           <div className="mt-4 flex w-full items-center justify-center text-slate-200">
