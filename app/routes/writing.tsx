@@ -9,6 +9,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json({ ok: true });
 };
 
+// create form for input
+// create the action for the form
+// bring recent completion into page from the database
+
 export default function Writing() {
   const user = useUser();
   return <div className="text-slate-100">{user.email}</div>;
