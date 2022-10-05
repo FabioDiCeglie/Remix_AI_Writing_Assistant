@@ -31,6 +31,16 @@ export default function Writing() {
         </div>
       </div>
       <h1 className="text-2xl font-bold">AI writing tool</h1>
+      <Form action="post">
+        <fieldset className="mt-4 w-full">
+          <textarea
+            name="prompt"
+            id="prompt"
+            rows={5}
+            className="w-full rounded-sm bg-slate-800 text-slate-200"
+          ></textarea>
+        </fieldset>
+      </Form>
     </div>
   );
 }
