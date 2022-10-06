@@ -19,10 +19,21 @@ export const action: ActionFunction = async ({ request }) => {
   const requestBody = await request.formData();
   const body = Object.fromEntries(requestBody);
 
+  //check the user has enough tokens
+
+  //if not enough return an error
+
+  // make the request to OPENAI  API
+
+  // if not successful, return error
+
+  // Save the completion to the database
+
+  // Update the user tokens if req succesful
+
   return json({ ok: true });
 };
 
-// create form for input
 // create the action for the form
 // bring recent completion into page from the database
 
