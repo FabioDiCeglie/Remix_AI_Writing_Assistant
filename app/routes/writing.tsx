@@ -1,4 +1,4 @@
-import { Form, Link } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { useUser } from "~/utils";
 import { requireUserId } from "~/session.server";
 import { json, LoaderFunction } from "@remix-run/server-runtime";
@@ -15,6 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Writing() {
   const user = useUser();
+
   return (
     <div className="text-slate-100">
       <div className="mx-auto mt-4 flex w-full items-center justify-between text-slate-200">
@@ -40,7 +41,7 @@ export default function Writing() {
             className="w-full rounded-sm bg-slate-800 p-4 text-slate-200"
           ></textarea>
 
-          <div className="flex">
+          <div className="mt-4 flex items-center">
             <input
               type="number"
               name="tokens"
@@ -55,6 +56,9 @@ export default function Writing() {
               {" "}
               Submit
             </button>
+            <div className="ml-4">
+              You have {user.tokens.toLocaleString()} tokens remaining
+            </div>
           </div>
         </fieldset>
       </Form>
