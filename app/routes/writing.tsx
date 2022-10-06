@@ -1,10 +1,23 @@
 import { Form } from "@remix-run/react";
 import { useUser } from "~/utils";
 import { requireUserId } from "~/session.server";
-import { json, LoaderFunction } from "@remix-run/server-runtime";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+} from "@remix-run/server-runtime";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
+
+  return json({ ok: true });
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const userId = await requireUserId(request);
+
+  const requestBody = await request.formData();
+  const body = Object.fromEntries(requestBody);
 
   return json({ ok: true });
 };
@@ -32,7 +45,8 @@ export default function Writing() {
         </div>
       </div>
       <h1 className="text-2xl font-bold">AI writing tool</h1>
-      <Form action="post">
+
+      <Form method="post">
         <fieldset className="mt-4 w-full">
           <textarea
             name="prompt"
