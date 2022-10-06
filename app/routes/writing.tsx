@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form, useActionData } from "@remix-run/react";
 import { useUser } from "~/utils";
 import { requireUserId } from "~/session.server";
 import {
@@ -6,6 +6,7 @@ import {
   json,
   LoaderFunction,
 } from "@remix-run/server-runtime";
+import { getUserById } from "~/models/user.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -15,12 +16,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request);
+  const currentUser = await getUserById(userId);
 
   const requestBody = await request.formData();
   const body = Object.fromEntries(requestBody);
 
-  //check the user has enough tokens
+  const errors = {
+    tokens:
+      currentUser && Number(body.tokens) > currentUser?.tokens
+        ? "Not enough tokens"
+        : undefined,
+  };
 
+  const hasErrors = Object.values(errors).some((errorMessage) => errorMessage);
+  //check the user has enough tokens
+  if (hasErrors) {
+    return json(errors);
+  }
   //if not enough return an error
 
   // make the request to OPENAI  API
@@ -31,7 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   // Update the user tokens if req succesful
 
-  return json({ ok: true });
+  return json({ ok: true, errors });
 };
 
 // create the action for the form
@@ -39,6 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Writing() {
   const user = useUser();
+  const errors = useActionData();
 
   return (
     <div className="text-slate-100">
@@ -65,6 +78,7 @@ export default function Writing() {
             rows={5}
             className="w-full rounded-sm bg-slate-800 p-4 text-slate-200"
           ></textarea>
+          {errors && <p className="text-sm text-red-700">{errors.tokens}</p>}
 
           <div className="mt-4 flex items-center">
             <input
