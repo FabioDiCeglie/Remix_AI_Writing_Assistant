@@ -13,6 +13,13 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
+export async function UpdateToken(id: User["id"], newToken: User["tokens"]) {
+  return prisma.user.update({
+    where: { id },
+    data: { tokens: newToken },
+  });
+}
+
 export async function createUser(email: User["email"], password: string) {
   const hashedPassword = await bcrypt.hash(password, 10);
 

@@ -19,7 +19,7 @@ export const addCompletion = ({
       answer: aiCompletion,
       token: Number(token),
       user: {
-        connect: { id: userId },
+        connect: { id: String(userId) },
       },
     },
   });

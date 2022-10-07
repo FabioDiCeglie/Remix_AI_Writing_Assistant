@@ -6,7 +6,7 @@ import {
   json,
   LoaderFunction,
 } from "@remix-run/server-runtime";
-import { getUserById } from "~/models/user.server";
+import { getUserById, UpdateToken } from "~/models/user.server";
 import { addCompletion } from "~/models/completions.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -70,15 +70,18 @@ export const action: ActionFunction = async ({ request }) => {
       token: Number(body.tokens),
     });
 
-    console.log(addedCompletion);
+    // Update the user tokens if req succesful
+    const updatedTokens = await UpdateToken(
+      userId,
+      Number(currentUser && currentUser?.tokens - Number(body?.tokens))
+    );
+
+    return json(addedCompletion);
   } catch (error: any) {
+    console.log(error);
     // if not successful, return error
     return json({ error: error.message });
   }
-
-  // Update the user tokens if req succesful
-
-  return json({ ok: true, errors });
 };
 
 // create the action for the form

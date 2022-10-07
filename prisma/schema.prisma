@@ -32,6 +32,6 @@ model Completion {
    answer String
    token Int
    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-   userId String @unique
+   userId String
    createdAt DateTime @default(now())
 }
