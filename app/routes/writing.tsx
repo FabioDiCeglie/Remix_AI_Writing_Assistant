@@ -76,16 +76,13 @@ export const action: ActionFunction = async ({ request }) => {
       Number(currentUser && currentUser?.tokens - Number(body?.tokens))
     );
 
-    return json(addedCompletion);
+    return json({ errors: undefined, addedCompletion });
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     // if not successful, return error
-    return json({ error: error.message });
+    return json({ errors: error.message });
   }
 };
-
-// create the action for the form
-// bring recent completion into page from the database
 
 export default function Writing() {
   const user = useUser();
