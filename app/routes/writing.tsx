@@ -36,28 +36,29 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   // make the request to OPENAI  API
-  const response = await fetch(
-    "https://api.openai.com/v1/engines/text-davinci-002/completions",
-    {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-      },
-      body: JSON.stringify({
-        prompt: body.prompt,
-        max_tokens: Number(body.tokens),
-        temperature: 0,
-        top_p: 1,
-        frequency_penalty: 0.52,
-        presence_penalty: 0.9,
-        n: 1,
-        best_of: 2,
-        stream: false,
-        logprobs: null,
-      }),
-    }
-  );
+  const response = await fetch("https://api.openai.com/v1/completions", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "text-davinci-002",
+      prompt: body.prompt,
+      max_tokens: Number(body.tokens),
+      temperature: 0.9,
+      top_p: 1,
+      frequency_penalty: 0.52,
+      presence_penalty: 0.9,
+      n: 1,
+      best_of: 2,
+      stream: false,
+      logprobs: null,
+    }),
+  });
+
+  const data = await response.json();
+  const completionsText = data.choices[0].text;
 
   // if not successful, return error
 
