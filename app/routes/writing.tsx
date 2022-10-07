@@ -7,6 +7,7 @@ import {
   LoaderFunction,
 } from "@remix-run/server-runtime";
 import { getUserById } from "~/models/user.server";
+import { addCompletion } from "~/models/completions.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
@@ -60,7 +61,16 @@ export const action: ActionFunction = async ({ request }) => {
 
     const data = await response.json();
     const completionsText = data.choices[0].text;
+
     // Save the completion to the database
+    const addedCompletion = await addCompletion({
+      aiCompletion: completionsText,
+      userId,
+      prompt: String(body.prompt),
+      token: Number(body.tokens),
+    });
+
+    console.log(addedCompletion);
   } catch (error: any) {
     // if not successful, return error
     return json({ error: error.message });
