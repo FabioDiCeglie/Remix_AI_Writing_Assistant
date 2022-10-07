@@ -1,5 +1,4 @@
-import { Form, useActionData } from "@remix-run/react";
-import { useUser } from "~/utils";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import {
   ActionFunction,
@@ -7,12 +6,18 @@ import {
   LoaderFunction,
 } from "@remix-run/server-runtime";
 import { getUserById, UpdateToken } from "~/models/user.server";
-import { addCompletion } from "~/models/completions.server";
+import {
+  addCompletion,
+  getMostRecentCompletion,
+} from "~/models/completions.server";
+import { Completion } from "@prisma/client";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request);
+  const currentUser = await getUserById(userId);
+  const recentCompletion = await getMostRecentCompletion(String(userId));
 
-  return json({ ok: true });
+  return json({ recentCompletion, currentUser });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -85,8 +90,9 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Writing() {
-  const user = useUser();
   const errors = useActionData();
+  const loaderData = useLoaderData();
+  const { currentUser: user, recentCompletion } = loaderData;
 
   return (
     <div className="text-slate-100">
@@ -136,6 +142,41 @@ export default function Writing() {
           </div>
         </fieldset>
       </Form>
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold text-indigo-500">
+          Recent completions
+        </h2>
+        {recentCompletion &&
+          recentCompletion.map((completion: Completion) => {
+            let text: any = completion.answer;
+            if (text.includes("\n")) {
+              text = text.split("\n");
+            }
+
+            text = [...text];
+            return (
+              <div key={completion.id} className="mt-8">
+                <h3 className="font-mono text-xl font-semibold text-white">
+                  {completion.prompt}
+                </h3>
+                <div>
+                  {text &&
+                    text.map((line: string) => (
+                      <p
+                        key={`${line}-${Math.random()
+                          .toString(36)
+                          .slice(2, 7)}`}
+                        className="mt-2"
+                      >
+                        {line}
+                      </p>
+                    ))}
+                </div>
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }
