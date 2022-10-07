@@ -1,4 +1,9 @@
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import {
   ActionFunction,
@@ -93,6 +98,7 @@ export default function Writing() {
   const errors = useActionData();
   const loaderData = useLoaderData();
   const { currentUser: user, recentCompletion } = loaderData;
+  const transition = useTransition();
 
   return (
     <div className="text-slate-100">
@@ -112,12 +118,15 @@ export default function Writing() {
       <h1 className="text-2xl font-bold">AI writing tool</h1>
 
       <Form method="post">
-        <fieldset className="mt-4 w-full">
+        <fieldset
+          className="mt-4 w-full"
+          disabled={transition.state === "submitting"}
+        >
           <textarea
             name="prompt"
             id="prompt"
             rows={5}
-            className="w-full rounded-sm bg-slate-800 p-4 text-slate-200"
+            className="w-full rounded-sm bg-slate-800 p-4 text-slate-200 disabled:bg-slate-800 disabled:text-slate-400"
           ></textarea>
           {errors && <p className="text-sm text-red-700">{errors.tokens}</p>}
 
@@ -127,11 +136,11 @@ export default function Writing() {
               name="tokens"
               id="tokens"
               defaultValue={150}
-              className="w-24 rounded-sm bg-slate-800 p-4 text-slate-200"
+              className="w-24 rounded-sm bg-slate-800 p-4 text-slate-200 disabled:bg-slate-900"
             />
             <button
               type="submit"
-              className="ml-4 rounded bg-slate-600 py-2 px-4 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
+              className="ml-4 rounded bg-slate-600 py-2 px-4 text-blue-100 hover:bg-blue-500 active:bg-blue-600 disabled:bg-slate-800 disabled:hover:bg-slate-800"
             >
               {" "}
               Submit
@@ -142,6 +151,12 @@ export default function Writing() {
           </div>
         </fieldset>
       </Form>
+
+      {transition.state && transition.state === "submitting" && (
+        <div className="my-8 flex justify-center">
+          <div className="loader">Loading...</div>
+        </div>
+      )}
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-indigo-500">
