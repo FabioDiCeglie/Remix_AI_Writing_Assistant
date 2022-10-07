@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request }) => {
         logprobs: null,
       }),
     });
-
+    console.log(response);
     const data = await response.json();
     const completionsText = data.choices[0].text;
 
