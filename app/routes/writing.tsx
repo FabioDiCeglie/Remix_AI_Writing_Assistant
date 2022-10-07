@@ -60,12 +60,11 @@ export const action: ActionFunction = async ({ request }) => {
 
     const data = await response.json();
     const completionsText = data.choices[0].text;
+    // Save the completion to the database
   } catch (error: any) {
     // if not successful, return error
     return json({ error: error.message });
   }
-
-  // Save the completion to the database
 
   // Update the user tokens if req succesful
 
