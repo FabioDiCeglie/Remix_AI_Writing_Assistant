@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request }) => {
         logprobs: null,
       }),
     });
-    console.log(response);
+
     const data = await response.json();
     const completionsText = data.choices[0].text;
 
@@ -116,6 +116,11 @@ export default function Writing() {
         </div>
       </div>
       <h1 className="text-2xl font-bold">AI writing tool</h1>
+      <p className="mt-2">
+        AI writing software is a type of software that can generate content for
+        you. An AI-powered writing assistant provides useful tools for writing
+        articles, novels, blog posts, and more.
+      </p>
 
       <Form method="post">
         <fieldset
