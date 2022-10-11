@@ -16,4 +16,4 @@
 
 ## Website
 
-[Website](https://ai-writing-assistant.fly.dev/)
+[Try it here!](https://ai-writing-assistant.fly.dev/)
